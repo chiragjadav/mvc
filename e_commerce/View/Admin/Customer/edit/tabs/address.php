@@ -1,10 +1,10 @@
 <?php $billing = $this->getBilling(); ?>
 <?php $shipping = $this->getShipping(); ?>
 <form method="POST" action="<?php echo "{$this->getFormUrl()}"; ?>">
-<div class="card p-2 m-2">
+<div class="card p-4 m-2" style="box-shadow: 0 0 10px 0 rgba(100, 100, 100, 0.26);">
 <div class="form-row mt-2">	
 	<div class="col-md-6">
-		<label class="card-title">Billing Address</label>
+		<label class="card-title"><h4>Billing Address</h4></label>
 	</div>
 </div>
 <div class="form-row mt-2">	
@@ -36,10 +36,10 @@
 </div>
 </div>
 
-<div class="card p-2 m-2">
+<div class="card p-4 m-2" style="box-shadow: 0 0 10px 0 rgba(100, 100, 100, 0.26);">
 <div class="form-row mt-2">	
 	<div class="col-md-6">
-		<label class="card-title">Shipping Address</label>
+		<label class="card-title"><h4>Shipping Address</h4></label>
 	</div>
 </div>
 

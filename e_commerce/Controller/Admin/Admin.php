@@ -40,12 +40,12 @@ class Admin extends \Controller\Core\Admin
 
 		} catch (Exception $e) {
 			echo $e->getMessage();
-			$this->redirect('grid',null,null,true);	
+			
 		}
 	}
 	public function saveAction() {
 		try{
-			$session = \Mage::getModel('Model\Admin\Message');
+			
 			$admin = \Mage::getModel('Model\Admin');
 			if(!$this->getRequest()->isPost()) {
 				throw new Exception("Invalid Request..!!  :(");
@@ -59,10 +59,10 @@ class Admin extends \Controller\Core\Admin
 				{
 					throw new Exception("Record Not Found..!!  :(", 1);
 				}
-				$session->setSuccess('Record Updated Successfully..!! :)');	
+				$this->getMessage()->setSuccess('Record Updated Successfully..!! :)');	
 			} else 
 			{
-				$session->setSuccess('Record Inserted Successfully..!! :)');	
+				$this->getMessage()->setSuccess('Record Inserted Successfully..!! :)');	
 			}
 			$admin->createdDate = Date("Y-m-d H:i:s");
 			$adminData = $this->getRequest()->getPost('admin');		
@@ -70,13 +70,13 @@ class Admin extends \Controller\Core\Admin
 			$admin->save();
 		
 		}catch(Exception $e) {
-			$session->setFailure($e->getMessage());
+			$this->getMessage()->setFailure($e->getMessage());
 		}
 			$this->gridAction();
 	}
 	public function deleteAction() {
 		try {
-			$session = \Mage::getModel('Model\Admin\Message');
+			
 			$admin = \Mage::getModel('Model\Admin');
 	        $adminId = $this->getRequest()->getGet('adminId');
 	        if(!$adminId)
@@ -88,9 +88,9 @@ class Admin extends \Controller\Core\Admin
 	        {
 	        	throw new Exception("Record Not Found..!!  :(", 1);
 	        }
-	        $session->setSuccess("Request Deleted Successfully..!! :)");
+	        $this->getMessage()->setSuccess("Request Deleted Successfully..!! :)");
 		} catch (Exception $e) {
-			 $session->setFailure($e->getMessage());
+			 $this->getMessage()->setFailure($e->getMessage());
 		}
 	        $this->redirect('grid',null,null,true);	
 	}

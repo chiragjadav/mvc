@@ -66,7 +66,7 @@ Base.prototype = {
         
         var formData = new FormData();
         var file = $("#imageFile")[0].files;
-        formData.append('productFile', file[0]);
+        formData.append('imageFile', file[0]);
         this.setParams(formData);
         self = this;
         var request = $.ajax({
@@ -138,9 +138,6 @@ $(document).ready(function(){
 //object.setUrl("http://localhost/e_commerce/index.php?c=category&a=grid");
 object.load();
 });
-
-
-
 
 
 

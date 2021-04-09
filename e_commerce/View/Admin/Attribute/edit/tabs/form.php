@@ -1,5 +1,10 @@
 <?php $attribute = $this->getTableRow(); ?>
 <form method="POST" action="<?php echo "{$this->geturl("save")}"; ?>">
+    <div class="form-row mt-2">
+        <div class="col-md-4 mr-4">
+            <label class="card-title"><h4> <?php if(($attribute->attributeId)!=null){ ?> Update Attribute <?php } else { ?> Add Attribute <?php } ?> </h4></label>
+        </div>
+    </div><hr>
 	<div class="form-row mt-2">
 		<div class="col-md-4 mr-4">
 			<label>Name</label>

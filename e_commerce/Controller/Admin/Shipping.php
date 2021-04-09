@@ -11,12 +11,11 @@ class Shipping extends \Controller\Core\Admin {
 		try{
 			$grid = \Mage::getBlock('Block\Admin\Shipping\Grid')->toHtml();
 			$this->responseGrid($grid);
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			echo $e->getMessage();
 		}
 	   
 	}
-
 	public function formAction() {
 		try{
 			
@@ -40,7 +39,7 @@ class Shipping extends \Controller\Core\Admin {
 	}
 	public function saveAction() {
 		try{
-			$session = \Mage::getModel('Model\Admin\Message');
+
 			$shipping = \Mage::getModel('Model\Shipping');
 			if(!$this->getRequest()->isPost()) {
 				throw new Exception("Invalid Request.");
@@ -54,39 +53,51 @@ class Shipping extends \Controller\Core\Admin {
 				{
 					throw new Exception("Record Not Found", 1);
 				}
-				$session->setSuccess('Record Updated Successfully..!! :)');	
+				$this->getMessage()->setSuccess('Record Updated Successfully..!! :)');	
 			} else {
-				$session->setSuccess('Record Inserted Successfully..!! :)');
+				$this->getMessage()->setSuccess('Record Inserted Successfully..!! :)');
 			} 
 			$shipping->createdDate = Date("Y-m-d H:i:s");
 			$shippingData = $this->getRequest()->getPost('shipping');		
 			$shipping->setData($shippingData);
 			$shipping->save();
-		
+
+			$grid = \Mage::getBlock('Block\Admin\Shipping\Grid')->toHtml();
+			$this->responseGrid($grid);
+
 		}catch(Exception $e) {
-			$session->setFailure($e->getMessage());
+			$this->getMessage()->setFailure($e->getMessage());
 		}
-		$this->gridAction();
+		
 	}
 	public function deleteAction() {
 		try{
-			$session = \Mage::getModel('Model\Admin\Message');
+			
 			$shipping = \Mage::getModel('Model\Shipping');
         	$shippingId = $this->getRequest()->getGet('shippingId');
 			 if (!$shippingId) {
-                throw new Exception("Invalid Request..!! :(");
+                throw new \Exception("Invalid Request..!! :(");
             }	
 			$shipping = $shipping->load($shippingId);	
 
 			if(!$shipping->delete()){
-				throw new Exception("Record Not Found..!! :(");	
+				throw new \Exception("Record Not Found..!! :(");	
 			}
-			$session->setFailure("Request Deleted Successfully..!! :)");
-		} catch (Exception $e) {
-			$session->setFailure($e->getMessage());	
+			$this->getMessage()->setFailure("Request Deleted Successfully..!! :)");
+		} catch (\Exception $e) {
+			$this->getMessage()->setFailure($e->getMessage());	
 		}
  
  	$this->gridAction();
 	}
+	public function testAction()
+	{
+		$query = "SELECT * FROM `shipping` WHERE `shippingId`='1'";
+		$shipping = \Mage::getModel('Model\Shipping')->fetchRow($query);
+		echo "<pre>";
+	//	print_r($shipping->shippingId = '123');
+		print_r($shipping);
+	}
 }
+
 ?>

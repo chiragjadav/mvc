@@ -41,7 +41,7 @@ class CustomerGroup extends \Controller\Core\Admin
 	}
 	public function saveAction() {
 		try{
-			$session = \Mage::getModel('Model\Admin\Message');
+			
 			$customerGroup = \Mage::getModel('Model\CustomerGroup');
 			if(!$this->getRequest()->isPost()) {
 				throw new Exception("Invalid Request..!!  :(");
@@ -55,22 +55,22 @@ class CustomerGroup extends \Controller\Core\Admin
 				{
 					throw new Exception("Record Not Found..!!  :(", 1);
 				}
-				$session->setSuccess('Record Updated Successfully..!! :)');	
+				$this->getMessage()->setSuccess('Record Updated Successfully..!! :)');	
 			} else {
-				$session->setSuccess('Record Inserted Successfully..!! :)');	
+				$this->getMessage()->setSuccess('Record Inserted Successfully..!! :)');	
 			}
 			$customerGroup->createdDate = Date("Y-m-d H:i:s");
 			$customerGroupData = $this->getRequest()->getPost('customerGroup');		
 			$customerGroup->setData($customerGroupData);
 			$customerGroup->save();
 		}catch(Exception $e) {
-			$session->setFailure($e->getMessage());
+			$this->getMessage()->setFailure($e->getMessage());
 		}
 		$this->gridAction();
 	}
 	public function deleteAction() {
 		try {
-			$session = \Mage::getModel('Model\Admin\Message');
+			
 			$customerGroup = \Mage::getModel('Model\CustomerGroup');
 	        $groupId = $this->getRequest()->getGet('groupId');
 	        if(!$groupId)
@@ -82,9 +82,9 @@ class CustomerGroup extends \Controller\Core\Admin
 	        {
 	        	throw new Exception("Record Not Found..!!  :(", 1);
 	        }
-	        $session->setSuccess("Request Deleted Successfully..!! :)");
+	        $this->getMessage()->setFailure("Request Deleted Successfully..!! :)");
 		} catch (Exception $e) {
-			 $session->setFailure($e->getMessage());
+			 $this->getMessage()->setFailure($e->getMessage());
 		}
 		$this->gridAction();
 	}

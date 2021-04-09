@@ -22,7 +22,7 @@ class Address extends \Block\Admin\Customer\Edit
 		$address =  \Mage::getModel('Model\CustomerAddress');
 		$this->billing = $address;
 		$this->shipping = $address;
-		if($id = $this->getRequest()->getGet('customerId')) 
+		if($id =  $this->getTableRow()->customerId) 
 		{
 			$query = "SELECT * FROM {$address->getTableName()} WHERE `customerId` = {$id}; ";
 			$address = $address->fetchAll($query);

@@ -57,7 +57,7 @@ $productId = $id->getRequest()->getGet('productId');
 </div>
 </form>
 
-<form method="POST" action="<?php echo "{$this->getUrl('saveMedia')}"; ?>" enctype="multipart/form-data">
+<form method="POST" action="<?php echo "{$this->getUrl('saveMedia','Admin\Product')}"; ?>" enctype="multipart/form-data">
 <div class="container mt-2">
 
     <div class="card p-1">
@@ -74,7 +74,7 @@ $productId = $id->getRequest()->getGet('productId');
         <div class="col-md-8 mr-4">
         	<!--<label class="form-label" for="customFile">Product Image</label>
 			<input type="file" class="form-control" name="fileImage" id="customFile">-->
-            <input type="button" onclick="object.setForm(this).setUrl('<?php echo $this->getUrl('saveMedia','product',null)?>').uploadFile() " name="submit" class="btn btn-success" id="submit" value="save">
+            <input type="button" onclick="object.setForm(this).setUrl('<?php echo $this->getUrl('saveMedia','Admin\product',null)?>').uploadFile() " name="submit" class="btn btn-success" id="submit" value="save">
         </div>
     </div>
 </div>

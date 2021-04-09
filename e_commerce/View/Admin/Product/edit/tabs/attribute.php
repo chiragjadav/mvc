@@ -1,11 +1,13 @@
 <?php $attribute = $this->getAttributes(); ?>
 <?php $product = $this->getTableRow(); ?>
 
-<form method="POST" action="<?php echo $this->getUrl('save','product\attribute'); ?>">
+<form method="POST" action="<?php echo $this->getUrl('save','Admin\product\attribute'); ?>">
 	<?php if($attribute): ?>
 		<?php foreach ($attribute->getData() as $attribute): ?>
 		<?php $displayBlock = \Mage::getBlock('Block\Admin\Attribute\Display');
 			$displayBlock->setAttribute($attribute)->setProduct($product);
+			/*echo "<pre>";
+			print_r($displayBlock);*/
 			echo $displayBlock->toHtml();
 		 ?>			
 		<?php endforeach; ?>

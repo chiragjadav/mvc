@@ -2,6 +2,11 @@
 
 <div class="container">
 <form method="POST" action="<?php echo "{$this->geturl("save")}"; ?>">
+	<div class="form-row mt-2">
+        <div class="col-md-4 mr-4">
+            <label class="card-title"><h4> <?php if(($payment->paymentId)!=null){ ?> Update Payment <?php } else { ?> Add Payment <?php } ?> </h4></label>
+        </div>
+    </div><hr>
 <div class="card p-5">
    	<div class="form-row mt-2">
 		<div class="col-md-4 mr-4">

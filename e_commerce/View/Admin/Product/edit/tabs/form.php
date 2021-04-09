@@ -1,7 +1,10 @@
-<form method="POST" action="<?php echo "{$this->getUrl('save')}"; ?>">
-    
-
 <?php $product = $this->getTableRow(); ?>
+<form method="POST" action="<?php echo "{$this->getUrl('save')}"; ?>">
+    <div class="form-row mt-2">
+        <div class="col-md-4 mr-4">
+            <label class="card-title"><h4> <?php if(($product->productId)!=null){ ?> Update Product <?php } else { ?> Add Product <?php } ?> </h4></label>
+        </div>
+    </div><hr>
   <div class="form-row mt-2">
         <div class="col-md-4 mr-4">
             <label>SKU</label>

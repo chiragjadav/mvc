@@ -1,6 +1,11 @@
 <?php $admin = $this->getTableRow(); ?>
 <form method="POST" action="<?php echo "{$this->geturl("save")}"; ?>">
 	<div class="form-row mt-2">
+        <div class="col-md-4 mr-4">
+            <label class="card-title"><h4> <?php if(($admin->adminId)!=null){ ?> Update Admin <?php } else { ?> Add Admin <?php } ?> </h4></label>
+        </div>
+    </div><hr>
+	<div class="form-row mt-2">
 		<div class="col-md-4 mr-4">
 			<label>Name</label>
 			<input type="text" name="admin[name]" id="name" class="form-control" value="<?php echo $admin->name; ?>">

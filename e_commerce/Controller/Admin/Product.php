@@ -36,7 +36,7 @@ class Product extends \Controller\Core\Admin {
 	}
 	public function saveAction() {
 		try{
-			$session = \Mage::getModel('Model\Admin\Message');
+			
 			$product = \Mage::getModel('Model\Product');
 			if(!$this->getRequest()->isPost()) {
 				throw new Exception("Invalid Request..!!  :(", 1);	
@@ -49,27 +49,27 @@ class Product extends \Controller\Core\Admin {
 				if(!$product) {
 					throw new Exception("Record Not Found..!!  :(", 1);	
 				}
-				$session->setSuccess('Record Updated Successfully..!! :)');
+				$this->getMessage()->setSuccess('Record Updated Successfully..!! :)');
 				$product->updatedDate = Date("Y-m-d H:i:s");
 				
 			} else {
 				$product->createdDate = Date("Y-m-d H:i:s");
 				$product->updatedDate = Date("Y-m-d H:i:s");
-				$session->setSuccess('Record Inserted Successfully..!! :)');
+				$this->getMessage()->setSuccess('Record Inserted Successfully..!! :)');
 			}
 			$productData = $this->getRequest()->getPost("product");
 			$product->setData($productData);
 			$product->save();
 			
 		}catch(Exception $e) {
-			$session->setFailure($e->getMessage());
+			$this->getMessage()->setFailure($e->getMessage());
 		}
 		$this->gridAction();
 	}
 
 	public function deleteAction() {
 		try{
-			$session = \Mage::getModel('Model\Admin\Message');
+			
 			$product = \Mage::getModel('Model\Product');
 			$productId = (int) $this->getRequest()->getGet('productId');
 			 if (!$productId) {
@@ -81,9 +81,9 @@ class Product extends \Controller\Core\Admin {
 			if(!$product->delete()){
 				throw new Exception("Record Not Found..!! :(");	
 			}
-			$session->setFailure("Request Deleted Successfully..!! :)");
+			$this->getMessage()->setFailure("Request Deleted Successfully..!! :)");
 		} catch(Exception $e) {
-			$session->setFailure($e->getMessage());
+			$this->getMessage()->setFailure($e->getMessage());
 		}
 		$this->gridAction();
 	}
@@ -91,30 +91,34 @@ class Product extends \Controller\Core\Admin {
 	public function saveMediaAction()
 	{
 		try {
-			$session = \Mage::getModel('Model\Admin\Message');
+			
 			$tab = $this->getRequest()->getGet('tab');
 			
 				if($tab == 'media')
 				{
-					$img = \Mage::getBlock('Block\Admin\Product\Edit\Tabs\Media');
+					$productImage = \Mage::getModel('Model\ProductImage');
 					if($imageData = $this->getRequest()->getPost('image'))
 					{
-						$images = $img->getImages();
+						$images = $productImage->fetchAll();
+						if(!$images)
+						{
+							throw new Exception("No Record", 1);
+							
+						}
 						foreach ($images->getData() as $key => $value) {
-							$img->getImage()->load($value->imageId);
-					
-							$img->getImage()->small = 0;
-							$img->getImage()->base = 0;
-							$img->getImage()->thumb = 0;
-							$img->getImage()->gallery = 0;
-							$img->getImage()->save();
+							$productImage->load($value->imageId);
+							$productImage->small = 0;
+							$productImage->base = 0;
+							$productImage->thumb = 0;
+							$productImage->gallery = 0;
+							$productImage->save();
 						}
 						foreach ($imageData as $key => $data) {
 							if($key!='data'){
 								continue;	
 							}
 							foreach ($data as $key1 => $value) {
-								$img->getImage()->load($key1);
+								$productImage->load($key1);
 								foreach ($value as $key2 => &$value2) {
 									if($key2 != 'gallery')
 									{
@@ -122,54 +126,58 @@ class Product extends \Controller\Core\Admin {
 									}
 									$value2 = 1;
 								}
-								$img->getImage()->setData($value);
-								$img->getImage()->save();
+								$productImage->setData($value);
+								$productImage->save();
 							}
 						}
 						foreach ($imageData as $key => $value) {
 							
 							if($key == 'small'){
-								$img->getImage()->load($value);
-								$img->getImage()->small = 1;
-								$img->getImage()->save();
+								$productImage->load($value);
+								$productImage->small = 1;
+								$productImage->save();
 							}
 							if($key == 'thumb'){
-								$img->getImage()->load($value);
-								$img->getImage()->thumb = 1;
-								$img->getImage()->save();
+								$productImage->load($value);
+								$productImage->thumb = 1;
+								$productImage->save();
 							}
 							if($key == 'base'){
-								$img->getImage()->load($value);
-								$img->getImage()->base = 1;
-								$img->getImage()->save();
+								$productImage->load($value);
+								$productImage->base = 1;
+								$productImage->save();
 							}
 						}
 						$productId = $this->getRequest()->getGet('productId');
-						$img->productId = $productId;
-						$this->redirect('form',null,$productId,false);	
+						$productImage->productId = $productId;
+						//$this->redirect('form',null,$productId,false);	
 					} else {
-						$name = $_FILES['productFile']['name'];
+						$name = $_FILES['imageFile']['name'];
 						if($name == null)
 						{
 							$this->redirect('form',null,null,true);			
 						}
-						$tmp_name = $_FILES['productFile']['tmp_name'];
+						$tmp_name = $_FILES['imageFile']['tmp_name'];
 	 					$url = 'C:\xampp\htdocs\e_commerce\View\Admin\Product\edit\tabs\uploads/'.$name;
 						move_uploaded_file($tmp_name, $url);
 						$imagename = [
 							'name' => $name
 						];
-						echo "<pre>";
-						$productId = $this->getRequest()->getGet('productId');
-						$img->getImage()->productId = $productId;
-						$img->getImage()->setData($imagename);
 						
-						$img->getImage()->save();
-						$session->setSuccess('Record Inserted Successfully..!! :)');
+						
+						$productId = (int) $this->getRequest()->getGet('productId');
+						 if (!$productId) {
+			                throw new Exception("Invalid Request..!! :(");
+			            }
+						$productImage->productId = $productId;
+						$productImage = $productImage->setData($imagename);
+						
+						$productImage->save();
+						$this->getMessage()->setSuccess('Record Inserted Successfully..!! :)');
 					}
-					$form = \Mage::getBlock('Block\Admin\Product\Edit')->toHtml();
-					$leftSide = \Mage::getBlock('Block\Admin\Product\Edit\Tabs')->toHtml();
-					$this->responseGrid($form,$leftSide);
+					$form = \Mage::getBlock('Block\Admin\Product\Edit')->setTableRow($productImage)->toHtml();
+					// $leftSide = \Mage::getBlock('Block\Admin\Product\Edit\Tabs')->toHtml();
+					$this->responseGrid($form);
 				}
 		} catch (Exception $e) {
 			$session->setFailure($e->getMessage());
@@ -177,7 +185,6 @@ class Product extends \Controller\Core\Admin {
 	}
 	public function deleteMediaAction(){
 		try {
-			$session = \Mage::getModel('Model\Admin\Message');
 
 			$tab = $this->getRequest()->getGet('tab');
 		
@@ -189,17 +196,17 @@ class Product extends \Controller\Core\Admin {
 						$img->load($value);
 						$img->delete();						
 					}
-				$session->setFailure("Request Deleted Successfully..!! :)");
+				$this->getMessage()->setFailure("Request Deleted Successfully..!! :)");
 				$productId = $this->getRequest()->getGet('productId');
 				$img->productId = $productId;
 				// $this->redirect('form',null,$productId,false);
 				// $this->gridAction();
-				$form = \Mage::getBlock('Block\Admin\Product\Edit')->toHtml();
-				$leftSide = \Mage::getBlock('Block\Admin\Product\Edit\Tabs')->toHtml();
-				$this->responseGrid($form,$leftSide);
+				$form = \Mage::getBlock('Block\Admin\Product\Edit')->setTableRow($img)->toHtml();
+				
+				$this->responseGrid($form);
 			}
 		} catch (Exception $e) {
-			$session->setFailure($e->getMessage());
+			$this->getMessage()->setFailure($e->getMessage());
 				// $this->redirect('grid',null,null,true);
 		}
 	} 

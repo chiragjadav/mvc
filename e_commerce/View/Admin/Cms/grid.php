@@ -34,8 +34,8 @@ echo "HEY..!! WELL DONE..!!  :)";
               <td><?php echo $value->content; ?></td>
               <td><?php echo $value->status; ?></td>
               <td><?php echo $value->createdDate; ?></td>
-              <td><a onclick="object.setUrl('<?php echo $this->geturl('form','cms',['pageId' => $value->pageId]);?>').resetParams().load()" title="Update Contact"  class=" btn btn-warning" role="button">Update</a>
-              <a onclick="object.setUrl('<?php echo $this->geturl('delete','cms',['pageId'=>$value->pageId]);?>').resetParams().load()" title="Delete Product" class=" btn btn-danger " role="button">Delete</a></td>
+              <td><a onclick="object.setUrl('<?php echo $this->geturl('form',null,['pageId' => $value->pageId]);?>').resetParams().load()" title="Update Contact"  class=" btn btn-warning" role="button">Update</a>
+              <a onclick="object.setUrl('<?php echo $this->geturl('delete',null,['pageId'=>$value->pageId]);?>').resetParams().load()" title="Delete Product" class=" btn btn-danger " role="button">Delete</a></td>
             </tr>
           <?php endforeach; ?>
           <?php endif; ?>

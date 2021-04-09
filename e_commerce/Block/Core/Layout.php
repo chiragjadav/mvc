@@ -4,9 +4,9 @@ namespace Block\Core;
 
 class Layout extends Template
 {
-	public function __construct(\Controller\Core\Admin $controller = Null)
+	public function __construct()
 	{
-		$this->setController($controller);
+		
 		$this->setTemplate('View/core/layout/oneColumn.php');
 		$this->prepareChildren();
 	}

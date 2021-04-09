@@ -19,7 +19,6 @@ class Customer extends \Controller\Core\Admin {
 			die();
 		}		
 	}
-
 	public function formAction() {
 		try {
 			$customer =  \Mage::getModel('Model\Customer');
@@ -45,7 +44,6 @@ class Customer extends \Controller\Core\Admin {
 	public function saveAction() {
 		try{
 
-			$session = \Mage::getModel('Model\Admin\Message');
 			$customer = \Mage::getModel('Model\Customer');
 
 			if(!$this->getRequest()->isPost()) {
@@ -61,7 +59,12 @@ class Customer extends \Controller\Core\Admin {
 			
 					if($tab == 'address')
 					{
-						$addressBlock = \Mage::getBlock('Block\Admin\Customer\Edit\Tabs\Address');
+						$customer = $customer->load($customerId); 
+						if(!$customer)
+						{
+							throw new Exception("Record Not Found", 1);
+						}
+						$addressBlock = \Mage::getBlock('Block\Admin\Customer\Edit\Tabs\Address')->setTableRow($customer);
 
 						$billingData = $this->getRequest()->getPost('billing');
 						$shippingData = $this->getRequest()->getPost('shipping');
@@ -79,14 +82,13 @@ class Customer extends \Controller\Core\Admin {
 							$address->customerId = $customerId;
 							$address->save();
 							
-							// $this->gridAction();
 					} else {
 						$customer = $customer->load($customerId); 
 						if(!$customer)
 						{
 							throw new Exception("Record Not Found", 1);
 						}	
-						$session->setSuccess('Record Updated Successfully..!! :)');
+						$this->getMessage()->setSuccess('Record Updated Successfully..!! :)');
 						$customerData = $this->getRequest()->getPost('customer');		
 						$customer->setData($customerData);
 						$customer->save();
@@ -95,15 +97,15 @@ class Customer extends \Controller\Core\Admin {
 			else {
 				$customer->createdDate = Date("Y-m-d H:i:s");
 				$customer->updatedDate = Date("Y-m-d H:i:s");
-				$session->setSuccess('Record Inserted Successfully..!! :)');
-					$customerData = $this->getRequest()->getPost('customer');		
-					$customer->setData($customerData);
-					$customer->save();
+				$this->getMessage()->setSuccess('Record Inserted Successfully..!! :)');
+				$customerData = $this->getRequest()->getPost('customer');		
+				$customer->setData($customerData);
+				$customer->save();
 			} 
 		$this->gridAction();
 			
 		}catch(Exception $e) {
-			$session->setFailure($e->getMessage());
+			$this->getMessage()->setFailure($e->getMessage());
 		}
 	}
 	public function deleteAction() {
@@ -115,6 +117,8 @@ class Customer extends \Controller\Core\Admin {
 	        	throw new Exception("Invalid Request..!! :(", 1);
 	        	
 	        }
+	        // $CustomerAddress = \Mage::getModel('Model\CustomerAddress');
+	        // $CustomerAddress->deleteCustomerAddress($customerId);
 	        $customer->load($customerId);	
 
 			if(!$customer->delete()){

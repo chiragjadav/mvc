@@ -43,7 +43,7 @@ class Cms extends \Controller\Core\Admin
 	}
 	public function saveAction() {
 		try{
-			$session = \Mage::getModel('Model\Admin\Message');
+			
 			$cms = \Mage::getModel('Model\Cms');
 			if(!$this->getRequest()->isPost()) {
 				throw new Exception("Invalid Request..!!  :(");
@@ -58,24 +58,24 @@ class Cms extends \Controller\Core\Admin
 				{
 					throw new Exception("Record Not Found..!!  :(", 1);
 				}
-				$session->setSuccess('Record Updated Successfully..!! :)');	
+				$this->getMessage()->setSuccess('Record Updated Successfully..!! :)');	
 			} else 
 			{
 				$cms->createdDate = Date("Y-m-d H:i:s");
-				$session->setSuccess('Record Inserted Successfully..!! :)');	
+				$this->getMessage()->setSuccess('Record Inserted Successfully..!! :)');	
 			}
 			$cmsData = $this->getRequest()->getPost('cms');
 			$cms->setData($cmsData);
 			$cms->save();
 		
 		}catch(Exception $e) {
-			$session->setFailure($e->getMessage());
+			$this->getMessage()->setFailure($e->getMessage());
 		}
 			$this->gridAction();
 	}
 	public function deleteAction() {
 		try {
-			$session = \Mage::getModel('Model\Admin\Message');
+			
 			$cms = \Mage::getModel('Model\Cms');
 	        $pageId = $this->getRequest()->getGet('pageId');
 	        if(!$pageId)
@@ -87,11 +87,11 @@ class Cms extends \Controller\Core\Admin
 	        {
 	        	throw new \Exception("Record Not Found..!!  :(", 1);
 	        }
-	        $session->setSuccess("Request Deleted Successfully..!! :)");
+	        $this->getMessage()->setFailure("Request Deleted Successfully..!! :)");
 		} catch (\Exception $e) {
-			 $session->setFailure($e->getMessage());
+			 $this->getMessage()->setFailure($e->getMessage());
 		}
-	        $this->redirect('grid',null,null,true);	
+	       $this->gridAction();
 	}
 }
 

@@ -39,7 +39,7 @@ class Category extends \Controller\Core\Admin {
 	}
 	public function saveAction() {
 		try{
-			$session = \Mage::getModel('Model\Admin\Message');
+			
 			$category = \Mage::getModel('Model\Category');
 			if(!$this->getRequest()->isPost()) {
 				throw new Exception("Invalid Request.");
@@ -53,7 +53,7 @@ class Category extends \Controller\Core\Admin {
 				{
 					throw new Exception("Record Not Found", 1);
 				}
-				$session->setSuccess('Record Updated Successfully..!! :)');	
+				$this->getMessage()->setSuccess('Record Updated Successfully..!! :)');	
 
 				$categoryData = $this->getRequest()->getPost('category');		
 				$category->setData($categoryData);
@@ -62,7 +62,7 @@ class Category extends \Controller\Core\Admin {
 				$category->updateChildrenPathIds($pathId);
 
 			}  else {
-				$session->setSuccess('Record Inserted Successfully..!! :)');
+				$this->getMessage()->setSuccess('Record Inserted Successfully..!! :)');
 				$categoryData = $this->getRequest()->getPost('category');		
 			
 				$category->setData($categoryData);
@@ -72,13 +72,13 @@ class Category extends \Controller\Core\Admin {
 			}
 
 		}catch(Exception $e) {
-			$session->setFailure($e->getMessage());
+			$this->getMessage()->setFailure($e->getMessage());
 		}
 		$this->gridAction();
 	}
 	public function deleteAction() {
 		try {
-			$session = \Mage::getModel('Model\Admin\Message');
+			
 			$category = \Mage::getModel('Model\Category');
 	        $categoryId = $this->getRequest()->getGet('categoryId');
 	        if(!$categoryId)
@@ -94,7 +94,7 @@ class Category extends \Controller\Core\Admin {
 	        }
 			$this->gridAction();
 		} catch (Exception $e) {
-			 $session->setFailure($e->getMessage());
+			 $this->getMessage()->setFailure($e->getMessage());
 		}
 	}
 	

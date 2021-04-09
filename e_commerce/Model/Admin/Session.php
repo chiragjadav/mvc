@@ -4,7 +4,7 @@ namespace Model\Admin;
 
 class Session extends \Model\Core\Session
 {
-	function __construct()
+	public function __construct()
 	{
 		parent::__construct();
 		$this->setNameSpace('Admin');

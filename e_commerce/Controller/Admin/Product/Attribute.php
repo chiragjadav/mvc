@@ -8,19 +8,12 @@ class Attribute extends \Controller\Core\Admin {
 		$productId = $this->getRequest()->getGet('productId');
 		
 		$product = \Mage::getModel('Model\Product')->load($productId);
-		if($attribute['color'] != 'select')
-		{
-			$product->color=$attribute['color'];
-			$product->save();
+		foreach ($attribute as $key => $value) {
+			$product->$key = $value;
 		}
-		if($attribute['brand'] != 'select')
-		{
-			$product->brand=$attribute['brand'];
-			$product->save();
-		}
-
-		$grid = \Mage::getBlock('Block\Admin\Product\Grid')->toHtml();
-		$this->responseGrid($grid);
+		$product->save();
+		//$grid = \Mage::getBlock('Block\Admin\Product\Grid')->toHtml();
+		//this->responseGrid($grid);
 	}
 }
 ?>

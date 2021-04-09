@@ -3,8 +3,9 @@ namespace Model\Core;
 class Table {
 	protected $primaryKey = null;
 	protected $tableName = null;
-	protected $adapter = null;
 	protected $data = [];
+	protected $originalData = [];
+	protected $adapter = null;
 
 	public function setPrimaryKey($primaryKey) {
 		$this->primaryKey = $primaryKey;
@@ -31,15 +32,41 @@ class Table {
 	public function getData() {
 		return $this->data;
 	}
+	public function resetData()
+	{
+		$this->data = [];
+		return $this;
+	}
+	public function setOriginalData(array $originalData)
+	{
+		$this->originalData = array_merge($this->originalData,$originalData);
+		return $this;
+	}
+	public function getOriginalData()
+	{
+		return $this->originalData;
+	}
 	public function __set($key,$value) {
 		$this->data[$key] = $value;
 	}
 	public function __get($key) {
-		if(!array_key_exists($key, $this->data)) {
-			return null;
+		if(array_key_exists($key, $this->data)) {
+			return $this->data[$key];
 		}
-		return $this->data[$key];
+		if(array_key_exists($key, $this->originalData))
+		{
+			return $this->originalData[$key];
+		}
+		return null;
 	}
+	public function __unset($key)
+    {
+        if(array_key_exists($key, $this->data))
+        {
+            unset($this->data[$key]);
+        }
+        return $this;
+    }
 	public function setAdapter() {
 		$this->adapter = \Mage::getModel('Model\Core\Adapter');
 		return $this;
@@ -50,15 +77,20 @@ class Table {
         }
 		return $this->adapter;
 	}
-	public function save($query=null) {
+	public function save($query = null) {
 
-		
-				
-		if(!array_key_exists($this->getPrimaryKey(), $this->getData())){
-			
-			
-            $query = "INSERT INTO {$this->getTableName()} (`{$this->getPrimaryKey()}`, `".implode("`, `",array_keys($this->getData()))."`) VALUES ('', '".implode("', '",$this->getData())."')";
-         
+		if(array_key_exists($this->getPrimaryKey(), $this->getData()))
+		{
+			unset($this->data[$this->getPrimaryKey()]);
+		}
+		if(!$this->data)
+		{
+			return false;
+		}
+
+		if(!array_key_exists($this->getPrimaryKey(), $this->getOriginalData())){
+        $query = "INSERT INTO {$this->getTableName()} (`{$this->getPrimaryKey()}`, `".implode("`, `",array_keys($this->getData()))."`) VALUES ('', '".implode("', '",$this->getData())."')";
+            
             return $this->getAdapter()->insert($query);
         }
         $strData = null;
@@ -67,18 +99,19 @@ class Table {
                 $strData .= "`{$key}` = '{$value}', ";
             }
         }
-        $id = $this->getData()[$this->getPrimaryKey()];
+        
+		$id = $this->getOriginalData()[$this->getPrimaryKey()];
         $strData = substr_replace($strData, "", -2);
         $query = "UPDATE `{$this->getTableName()}` SET {$strData} WHERE `{$this->getPrimaryKey()}` = '{$id}'";
-   
+        //die();
         return $this->getAdapter()->update($query);
 	}
 	public function delete() {
 
-		if(!array_key_exists($this->getPrimaryKey(),$this->getData())){
+		if(!array_key_exists($this->getPrimaryKey(),$this->getOriginalData())){
 			return false;
 		}
-		$id = $this->getData()[$this->getPrimaryKey()];
+		$id = $this->getOriginalData()[$this->getPrimaryKey()];
 	    $query = "DELETE FROM {$this->getTableName()} WHERE {$this->getPrimaryKey()}={$id}";
 	
 		return $this->getAdapter()->delete($query);
@@ -96,7 +129,8 @@ class Table {
 		if(!$row) {
 			return false;
 		}
-		$this->setData($row);
+		$this->setOriginalData($row);
+		$this->resetData();
 		return $this;
 	}
 	public function fetchAll($query = null) {
@@ -111,11 +145,11 @@ class Table {
 		}
 		foreach ($rows as $key => &$value) {
 			$row = new $this;
-			$value = $row->setData($value);
+			$value = $row->setOriginalData($value);
 		}
 
 	
-		$this->setData($rows);
+		$this->setOriginalData($rows);
 	
 		$collectionClassName = get_class($this).'\Collection';
 		$collection = \Mage::getModel($collectionClassName);

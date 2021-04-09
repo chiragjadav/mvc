@@ -49,11 +49,11 @@ class Attribute extends \Model\Core\Table
 		{
 			return false;
 		}
-		$optionModel = \Mage::getModel('Model\Attribute\Option');
-		$query = "SELECT * FROM `{$optionModel->getTableName()}`
-		WHERE `{$this->getPrimaryKey()}`='{$this->attributeId}'
-		ORDER BY `sortOrder` ASC";
-		return  $optionModel->fetchAll($query);
+		 $optionModel = \Mage::getModel($this->backendModel);
+		// $query = "SELECT * FROM `{$optionModel->getTableName()}`
+		// WHERE `{$this->getPrimaryKey()}`='{$this->attributeId}'
+		// ORDER BY `sortOrder` ASC";
+		 return  $optionModel->setAttribute($this)->getOptions();
 	}
 }
 ?>

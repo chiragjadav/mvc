@@ -10,7 +10,7 @@ die();*/
 <form method="POST" action="<?php echo "{$this->getFormUrl()}"; ?>">
 	<div class="form-row mt-2">
         <div class="col-md-4 mr-4">
-            <label class="card-title"> <?php if(($customer->customerId)!=null){ ?> Update Customer <?php } else { ?> Add Customer <?php } ?> </label>
+            <label class="card-title"><h4> <?php if(($customer->customerId)!=null){ ?> Update Customer <?php } else { ?> Add Customer <?php } ?> </h4></label>
         </div>
     </div><hr>
 	<div class="form-row mt-2">

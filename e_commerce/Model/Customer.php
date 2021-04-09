@@ -17,6 +17,28 @@ class Customer extends Core\Table
 			self::STATUS_DISABLED => 'Disable'
 		];
 	}
+	public function getBillingAddress()
+	{
+		$customerAddress = \Mage::getModel('Model\CustomerAddress');
+		$query = "SELECT * FROM `{$customerAddress->getTableName()}` WHERE `customerId`='{$this->customerId}' AND `addressType`='Billing' ";
+		$customerAddress = $customerAddress->fetchRow($query);
+		if(!$customerAddress)
+		{
+			return false;
+		}
+		return $customerAddress;
+	}
+	public function getShippingAddress()
+	{
+		$customerAddress = \Mage::getModel('Model\CustomerAddress');
+		$query = "SELECT * FROM `{$customerAddress->getTableName()}` WHERE `customerId`='{$this->customerId}' AND `addressType`='Shipping' ";
+		$customerAddress = $customerAddress->fetchRow($query);
+		if(!$customerAddress)
+		{
+			return false;
+		}
+		return $customerAddress;
+	}
 
 }
 ?>

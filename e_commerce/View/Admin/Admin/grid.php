@@ -7,7 +7,7 @@ echo "HEY..!! WELL DONE..!!  :)";
 ?>
 <div class="container-fluid">
  
-<a class="btn btn-success mt-4 float-right" onclick="object.setUrl('<?php echo $this->geturl('form',null,null,true);?>').resetParams().load()">Create Admin <i class="fa fa-plus" aria-hidden="true"></i></a><br><br><br><br>
+<a class="btn btn-success text-white mt-4 float-right" onclick="object.setUrl('<?php echo $this->geturl('form',null,null,true);?>').resetParams().load()">Create Admin <i class="fa fa-plus" aria-hidden="true"></i></a><br><br><br><br>
  <div class="card">
 <div id="table">
     <table class="table table-hover">
@@ -35,8 +35,8 @@ echo "HEY..!! WELL DONE..!!  :)";
               <td><?php echo $value->password; ?></td>
               <td><?php echo $value->status; ?></td>
               <td><?php echo $value->createdDate; ?></td>
-              <td><a onclick="object.setUrl('<?php echo $this->geturl('form','admin',['adminId' => $value->adminId]);?>').resetParams().load()" title="Update Contact"  class=" btn btn-warning" role="button">Update</a>
-              <a onclick="object.setUrl('<?php echo $this->geturl('delete','admin',['adminId'=>$value->adminId]);?>').resetParams().load()" title="Delete Product" class=" btn btn-danger " role="button">Delete</a></td>
+              <td><a onclick="object.setUrl('<?php echo $this->geturl('form',null,['adminId' => $value->adminId]);?>').resetParams().load()" title="Update Contact"  class=" btn btn-warning text-white" role="button"><i class="fas fa-cog"></i></a>
+              <a onclick="object.setUrl('<?php echo $this->geturl('delete',null,['adminId'=>$value->adminId]);?>').resetParams().load()" title="Delete Product" class=" btn btn-danger text-white" role="button"><i class="fas fa-trash"></i></a></td>
             </tr>
           <?php endforeach; ?>
           <?php endif; ?>

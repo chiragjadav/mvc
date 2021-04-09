@@ -19,8 +19,10 @@ class Session
 	}
 	public function start()
 	{
-		session_start();
-		return $this;
+		if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        return $this;
 	}
 	
 	public function destroy()

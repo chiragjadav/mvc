@@ -1,52 +1,48 @@
-<?php
-
-$products = $this->getProducts();
-echo "HEY..!! WELL DONE..!!  :)";
-
-?>
-
+<?php $collection = $this->getCollection(); ?>
 <div class="container-fluid">
-<a class="btn btn-success mt-4 float-right" onclick="object.setUrl('<?php echo $this->geturl('form',null,null,true);?>').resetParams().load()" >Create Product <i class="fa fa-plus" aria-hidden="true"></i></a><br><br><br><br>
-<div class="card">
+<?php echo "HEY..!! WELL DONE..!!  :)"; ?>
+    <h3 class="mt-4"><?php  echo $this->getTitle(); ?></h3>
+    <hr>
+<?php foreach($this->getButton() as $key => $button) :?>
+  <?php if($button['ajax']): ?>
+      <a class="btn btn-success mt-4 float-right" href="javascript:void(0)" onclick="<?= $this->getButtonUrl($button['method']); ?>"><?= $button['label']; ?></a>
+  <?php else: ?>
+      <a href="<?= $this->getButtonUrl($button['method']); ?>"><?= $button['label']; ?><i class="fa fa-plus" aria-hidden="true"></i></a>
+  <?php endif; ?>
+<?php endforeach;  ?>   
+<br><br><br><br>
+<div class="card mt-6">
 <div id="table">
     <table class="table table-hover">
       <thead class="thead-light">
         <tr>
-            <th>Product Id</th>
-            <th>SKU</th>
-            <th>Product Name</th>
-            <th>Price</th>
-            <th>Discount</th>
-            <th>Quantity</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Create Date</th>
-            <th>Updated Date</th>
-            <th colspan="2">Action</th>
+          <?php foreach($this->getColumns() as $key => $column) : ?>
+              <th><?= $column['label']; ?></th>
+          <?php endforeach;  ?> 
+           <th colspan="2">Action</th>
         </tr>
+        
       </thead>
       <tbody>
-        <?php if(!$products): ?>
+        <?php if(!$collection): ?>
         <tr><td>No Record Found..!! :(</td></tr>
 
         <?php else: ?>
-        <?php foreach($products->getData() as $key=>$value) : ?>
-            <tr>
-              <td><?php echo $value->productId; ?></td>
-              <td><?php echo $value->sku; ?></td>
-              <td><?php echo $value->name; ?></td>
-              <td><?php echo $value->price; ?></td>
-              <td><?php echo $value->discount; ?></td>
-              <td><?php echo $value->quantity; ?></td>
-              <td><?php echo $value->description; ?></td>
-              <td><?php echo $value->status; ?></td>
-              <td><?php echo $value->createdDate; ?></td>
-              <td><?php echo $value->updatedDate; ?></td>
-              <td><a onclick="object.setUrl('<?php echo $this->geturl('form','product',['productId'=>$value->productId]) ?>').resetParams().load()" title="Update Contact" class=" btn btn-warning " role="button">Update</a>
-                  <a onclick="object.setUrl('<?php echo $this->geturl('delete','product',['productId'=>$value->productId]) ?>').resetParams().load()" title="Delete Product" class=" btn btn-danger " role="button">Delete</a>
-                  
-            </td>
-            </tr>
+        <?php foreach($collection->getData() as $key=>$row) : ?>
+          <tr>
+          <?php foreach($this->getColumns() as $key => $column) : ?>
+              <td><?= $this->getFieldValue($row,$column['field']); ?></td>
+          <?php endforeach;  ?> 
+          <td>
+          <?php foreach($this->getActions() as $key => $action) :?>
+            <?php if($action['ajax']): ?>
+                <a href="javascript:void(0)" onclick="<?= $this->getMethodUrl($row,$action['method']); ?>"><?= $action['label']; ?></a>
+            <?php else: ?>
+                <a href="<?= $this->getMethodUrl($row,$action['method']); ?>"><?= $action['label']; ?></a>
+            <?php endif; ?>
+          <?php endforeach;  ?>   
+              </td>
+        </tr>
           <?php endforeach; ?>
         <?php endif; ?>
       </tbody>

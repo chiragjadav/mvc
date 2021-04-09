@@ -103,5 +103,13 @@ class Adapter
         }
         return false;
     }
+
+    public function fetchOne($query)
+    {
+        if(!$this->isConnected()){
+            $this->connection();
+        }
+        return $this->getConnect()->query($query)->num_rows;
+    }
 }
 ?>

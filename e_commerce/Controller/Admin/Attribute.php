@@ -42,47 +42,9 @@ class Attribute extends \Controller\Core\Admin
 	}
 
 
-	public function optionAction()
-	{
-		$attribute = \Mage::getModel('Model\Attribute');
-		$attributeId = $this->getRequest()->getGet('attributeId');
-		$attribute->load($attributeId);
-
-		$optionGrid = \Mage::getBlock('Block\Admin\Attribute\Option\Grid')->setAttribute($attribute)->toHtml();
-		
-		$this->responseGrid($optionGrid);
-	}
-
-	public function saveOptionAction()
-	{
-		
-		$attributeId = $this->getRequest()->getGet('attributeId');
-		$optionData = $this->getRequest()->getPost();
-		
-		foreach ($optionData['exist'] as $optionId => $option) {
-			$query = "SELECT * FROM attribute_option
-			WHERE `attributeId` = '$attributeId'
-			AND `optionId` = '$optionId'";
-
-			$attributeOption = \Mage::getModel('Model\Attribute\Option');
-			$attributeOption->fetchRow($query);
-			$attributeOption->name = $option['name'];
-			$attributeOption->sortOrder = $option['sortOrder'];
-			$attributeOption->save();
-		}
-		foreach ($optionData['new'] as $attributeId => $option) {
-			$attributeOption = \Mage::getModel('Model\Attribute\Option');
-			$attributeOption->attributeId = $attributeId;
-			$attributeOption->name = $option['name'];
-			$attributeOption->sortOrder = $option['sortOrder'];
-			$attributeOption->save();
-		}
-		$this->redirect('grid');
-	}
-
 	public function saveAction() {
 		try{
-			$session = \Mage::getModel('Model\Admin\Message');
+			
 			$attribute = \Mage::getModel('Model\Attribute');
 			if(!$this->getRequest()->isPost()) {
 				throw new Exception("Invalid Request..!!  :(");
@@ -96,29 +58,29 @@ class Attribute extends \Controller\Core\Admin
 				{
 					throw new Exception("Record Not Found..!!  :(", 1);
 				}
-				$session->setSuccess('Record Updated Successfully..!! :)');	
+				$this->getMessage()->setSuccess('Record Updated Successfully..!! :)');	
 				$attributeData = $this->getRequest()->getPost('attribute');
 				$attribute->setData($attributeData);
 			} else 
 			{
-				$session->setSuccess('Record Inserted Successfully..!! :)');	
+				$this->getMessage()->setSuccess('Record Inserted Successfully..!! :)');	
 				$attributeData = $this->getRequest()->getPost('attribute');
 				$attribute->setData($attributeData);
 				$table = $attribute->entityTypeId;			
 				$adapter = \Mage::getModel('Model\Attribute')->getAdapter();
-				echo $query = "ALTER TABLE `{$table}` ADD `{$attribute->code}` $attribute->backendType(20);";
+				$query = "ALTER TABLE `{$table}` ADD `{$attribute->code}` $attribute->backendType(20);";
 				$adapter->update($query);
 			}
 			$attribute->save();
 			
 		}catch(Exception $e) {
-			$session->setFailure($e->getMessage());
+			$this->getMessage()->setFailure($e->getMessage());
 		}
 		$this->gridAction();
 	}
 	public function deleteAction() {
 		try{
-			$session = \Mage::getModel('Model\Admin\Message');
+			
 			$attribute = \Mage::getModel('Model\Attribute');
         	$attributeId = $this->getRequest()->getGet('attributeId');
 			 if (!$attributeId) {
@@ -129,16 +91,42 @@ class Attribute extends \Controller\Core\Admin
 			if(!$attribute->delete()){
 				throw new Exception("Record Not Found..!! :(");	
 			}
-			$session->setFailure("Request Deleted Successfully..!! :)");
+			$this->getMessage()->setFailure("Request Deleted Successfully..!! :)");
 		} catch (Exception $e) {
-			$session->setFailure($e->getMessage());	
+			$this->getMessage()->setFailure($e->getMessage());	
 		}
  
  	$this->gridAction();
 	}
-	public function deleteOptionAction()
+	public function filterAction()
 	{
-		echo "wow";
+		try {
+			$filters = $this->getRequest()->getPost('filters');
+			$filterModel = \Mage::getModel('Model\Admin\Filter');
+			$filterModel->setFilters($filters);	
+			$this->getMessage()->setSuccess('Record Updated Successfully..!! :)');
+		} catch (Exception $e) {
+			$this->getMessage()->setFailure($e->getMessage());	
+		}
+		$this->gridAction();
+	}
+
+	public function testAction()
+	{
+		try {
+			echo "<pre>";
+			$query = "SELECT * FROM `attribute` WHERE `entityTypeId` = 'product'";
+			$attributes = \Mage::getModel('Model\Attribute')->fetchAll($query);
+			//print_r($attributes);
+
+			foreach ($attributes->getData() as $key => $attribute) {
+				//Method 1: /*$options = \Mage::getModel($attribute->backendModel)->setAttribute($attribute)->getOptions(); */
+				print_r($attribute->getOptions());
+			}
+
+		} catch (Exception $e) {
+			
+		}
 	}
 	
 }

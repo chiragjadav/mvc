@@ -1,9 +1,14 @@
 <?php $cms = $this->getTableRow(); ?>
 <form method="POST" id="form" action="<?php echo "{$this->geturl("save")}"; ?>">
 	<div class="form-row mt-2">
+        <div class="col-md-4 mr-4">
+            <label class="card-title"><h4> <?php if(($cms->pageId)!=null){ ?> Update CMS <?php } else { ?> Add CMS <?php } ?> </h4></label>
+        </div>
+    </div><hr>
+	<div class="form-row mt-2">
 		<div class="col-md-4 mr-4">
 			<label>Title</label>
-			<input type="text" name="cms[title]" id="name" class="form-control" value="<?php echo $cms->name; ?>">
+			<input type="text" name="cms[title]" id="name" class="form-control" value="<?php echo $cms->title; ?>">
 		</div>
 	</div>
 	<div class="form-row mt-2">

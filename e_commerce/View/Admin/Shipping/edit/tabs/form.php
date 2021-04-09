@@ -1,7 +1,10 @@
-<?php 
-$shipping = $this->getTableRow();
- ?>
+<?php $shipping = $this->getTableRow(); ?>
 <form method="POST" action="<?php echo "{$this->geturl("save")}"; ?>">
+	<div class="form-row mt-2">
+        <div class="col-md-4 mr-4">
+            <label class="card-title"><h4> <?php if(($shipping->shippingId)!=null){ ?> Update Shipping <?php } else { ?> Add Shipping <?php } ?> </h4></label>
+        </div>
+    </div><hr>
  	<div class="form-row mt-2">
 		<div class="col-md-4 mr-4">
 			<label>Name</label>

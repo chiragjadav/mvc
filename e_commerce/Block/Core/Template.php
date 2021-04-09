@@ -8,6 +8,7 @@ class Template
     protected $request = null;
     protected $url = null;
     protected $tabs = [];
+    protected $message = null;
 	public function setTemplate($template) 
 	{
 		$this->template = $template;
@@ -132,6 +133,23 @@ class Template
     {
         $this->tabs[$key] = $tab;
         return $this;
+    }
+   public function setMessage()
+    {
+        $this->message = \Mage::getModel('Model\Admin\Message');
+        return $this;
+    }
+
+    public function getMessage()
+    {
+        if(!$this->message) {
+            $this->setMessage();
+        }
+        return $this->message;
+    }
+    public function getBlock($className)
+    {
+        return \Mage::getBlock($className);
     }
 }
 ?>

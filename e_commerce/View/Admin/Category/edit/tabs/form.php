@@ -1,8 +1,12 @@
-<?php  $category = $this->getTableRow();
-	   $categoryOptions = $this->getCategoryOption();
+<?php  $category = $this->getTableRow(); ?>
+<?php  $categoryOptions = $this->getCategoryOption(); ?>
 
- ?>
 <form method="POST" action="<?php echo "{$this->getFormUrl()}"; ?>">
+	<div class="form-row mt-2">
+        <div class="col-md-4 mr-4">
+            <label class="card-title"><h4> <?php if(($category->categoryId)!=null){ ?> Update Category <?php } else { ?> Add Category <?php } ?> </h4></label>
+        </div>
+    </div><hr>
 	<div class="form-row mt-2">
 		<div class="col-md-4 mr-4">
 			<label>Parent Path</label>

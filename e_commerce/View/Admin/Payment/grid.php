@@ -5,7 +5,7 @@ $payments = $this->getPayments();
 echo "HEY..!! WELL DONE..!!  :)";
 ?>
 <div class="container-fluid">
-<a class="btn btn-success mt-4 float-right" onclick="object.setUrl('<?php echo "{$this->geturl("form", "payment")}"; ?>').resetParams().load()">Create Payment <i class="fa fa-plus" aria-hidden="true"></i></a><br><br><br><br>
+<a class="btn btn-success mt-4 float-right" onclick="object.setUrl('<?php echo "{$this->geturl("form", "Admin\payment")}"; ?>').resetParams().load()">Create Payment <i class="fa fa-plus" aria-hidden="true"></i></a><br><br><br><br>
 <div class="card">
 <div id="table">
     <table class="table table-hover">
@@ -33,8 +33,8 @@ echo "HEY..!! WELL DONE..!!  :)";
               <td><?php echo $value->description; ?></td>
               <td><?php echo $value->status; ?></td>
               <td><?php echo $value->createdDate; ?></td>
-              <td><a onclick="object.setUrl('<?php echo "{$this->geturl("form","payment")}&paymentId={$value->paymentId}"; ?>').resetParams().load()" title="Update Contact" class=" btn btn-warning" role="button">Update</a>
-              <a onclick="object.setUrl('<?php echo "{$this->geturl("delete", "payment")}&paymentId={$value->paymentId}"; ?>').resetParams().load()" title="Delete Product" class=" btn btn-danger " role="button">Delete</a></td>
+              <td><a onclick="object.setUrl('<?php echo "{$this->geturl("form")}&paymentId={$value->paymentId}"; ?>').resetParams().load()" title="Update Contact" class=" btn btn-warning" role="button">Update</a>
+              <a onclick="object.setUrl('<?php echo "{$this->geturl("delete")}&paymentId={$value->paymentId}"; ?>').resetParams().load()" title="Delete Product" class=" btn btn-danger " role="button">Delete</a></td>
             </tr>
           <?php endforeach; ?>
         <?php endif; ?>

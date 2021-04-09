@@ -38,7 +38,7 @@ class Request {
 	public function getControllerName()
 	{
 		//return $_GET['c'];
-		return $this->getGet('c','index');
+		return $this->getGet('c','Admin\index');
 	}
 }
 ?>

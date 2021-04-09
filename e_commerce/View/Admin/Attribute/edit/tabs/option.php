@@ -5,8 +5,8 @@ echo "HEY..!! WELL DONE..!!  :)";
 <div class="container-fluid">
  <div class="card">
 <div id="table">
-<form method="POST" action="<?php echo "{$this->geturl("save")}"; ?>">  
-    <a class="btn btn-warning mt-4 float-right" onclick="object.setForm(this).setUrl('<?php echo $this->getUrl('SaveOption') ?>').load()">Update option <i class="fa fa-plus" aria-hidden="true"></i></a>
+<form method="POST" action="<?php echo "{$this->geturl("save",'Admin\Attribute\Option')}"; ?>">  
+    <a class="btn btn-warning mt-4 float-right" onclick="object.setForm(this).setUrl('<?php echo $this->getUrl('save','Admin\Attribute\Option'); ?>').load()">Update option <i class="fa fa-plus" aria-hidden="true"></i></a>
     <input class="btn btn-success mr-4 mt-4 float-right" type="button" name="addOption" onclick="object.addRow()" value="Add option">
 
     <table class="table table-hover" id="existingOption">
@@ -29,8 +29,8 @@ echo "HEY..!! WELL DONE..!!  :)";
   <table class="table table-hover" id="newOption">
     <tbody>
       <tr>
-        <td><input type="text" name="new[<?php echo $option->optionId; ?>][name]"></td>
-        <td><input type="text" name="new[<?php echo $option->optionId; ?>][sortOrder]"></td>
+        <td><input type="text" name="new[name][]"></td>
+        <td><input type="text" name="new[sortOrder][]"></td>
         <td><input type="button" value="Remove Option" onclick="object.removeRow(this)"></td>
       </tr>
     </tbody>
@@ -44,9 +44,11 @@ echo "HEY..!! WELL DONE..!!  :)";
 
   function addRow(button) {
     var newOptionTable = document.getElementById('newOption');
+
     var existingOptionTable = document.getElementById('existingOption').children[0];
 
-    existingOptionTable.prepend(newOptionTable.children[0].children[0].cloneNode(true));
+   existingOptionTable.prepend(newOptionTable.children[0].children[0].cloneNode(true));
+    console.log(existingOptionTable);
   }
   function removeRow(button){
     var objTr = button.parentElement.parentElement;

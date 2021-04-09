@@ -14,7 +14,7 @@ class Payment extends \Controller\Core\Admin {
 			$this->responseGrid($grid);
 		} catch (Exception $e) {
 			echo $e->getMessage();
-			$this->redirect('grid',null,null,true);	
+			//$this->redirect('grid',null,null,true);	
 		}
 	}
 
@@ -50,17 +50,23 @@ class Payment extends \Controller\Core\Admin {
 				if(!$payment)
 				{
 					throw new Exception("Record Not Found", 1);
-				}	
+				}
+				$this->getMessage()->setSuccess('Record Updated Successfully..!! :)');
+			}
+			else 
+			{
+				$this->getMessage()->setSuccess('Record Inserted Successfully..!! :)');
 			} 
 			$payment->createdDate = Date("Y-m-d H:i:s");
 			$paymentData = $this->getRequest()->getPost('payment');		
 			$payment->setData($paymentData);
 			$payment->save();
-			$this->redirect('grid',null,null,true);
+			//$this->redirect('grid',null,null,true);
+			$this->gridAction();
 		
 		}catch(Exception $e) {
 			echo $e->getMessage();
-			die();
+			
 		}
 	}
 	public function deleteAction() {
@@ -77,11 +83,12 @@ class Payment extends \Controller\Core\Admin {
 	        {
 	        	throw new Exception("Record Not Found..!!  :(", 1);
 	        }
-	        $session->setSuccess("Request Deleted Successfully..!! :)");
+	        $this->getMessage()->setSuccess("Request Deleted Successfully..!! :)");
 		} catch (Exception $e) {
 			 $session->setFailure($e->getMessage());
 		}
-	        $this->redirect('grid',null,null,true);	
+			$this->gridAction();
+	       // $this->redirect('grid',null,null,true);	
 	}
 }
 ?>
